@@ -9,6 +9,7 @@ from core.models import Tag
 
 from recipe.serializers import TagSerializer
 
+
 TAGS_URL = reverse('recipe:tag-list')
 
 
@@ -49,8 +50,8 @@ class PrivateTags(TestCase):
 
     def test_tags_limited_to_user(self):
         # test that tags returned are for the authenticated user
-        user2 = get_usermodel().objects.create_user(
-            'test@test.com',
+        user2 = get_user_model().objects.create_user(
+            'test1@test.com',
             'test123'
         )
         Tag.objects.create(user=user2, name='Fruity')
@@ -58,6 +59,6 @@ class PrivateTags(TestCase):
 
         res = self.client.get(TAGS_URL)
 
-        self.assertEqual(rest.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data[0]['name'], tag.name)
